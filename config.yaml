@@ -1,0 +1,111 @@
+baseURL: 'https://ljweel.github.io/'
+languageCode: 'ko'
+defaultContentLanguage: 'ko'
+title: '장어의 블로그'
+theme: 'PaperMod'
+
+# 한국어 설정
+languages:
+  ko:
+    languageName: '한국어'
+    weight: 1
+    params:
+      title: 'ljweel의 블로그'
+      description: '개인 블로그'
+    menu:
+      main:
+        - identifier: posts
+          name: post
+          url: /posts/
+          weight: 10
+        - identifier: categories
+          name: category
+          url: /categories/
+          weight: 20
+        - identifier: tags
+          name: tag
+          url: /tags/
+          weight: 30
+
+
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON
+
+# PaperMod 테마 설정
+params:
+  env: production
+  title: 'ljweel의 블로그'
+  description: '개인 블로그'
+  keywords: [Blog, Portfolio, PaperMod]
+  author: ljweel
+  images: ['<link or path of image for opengraph, twitter-cards>']
+  
+  # Profile Mode 설정
+  profileMode:
+    enabled: true
+    title: "이정우  ljweel"
+    subtitle: "Python과 Backend에 관심이 있습니다 · 장어라고 불러주시면 됩니다"
+    imageUrl: "images/profile.png"  # 프로필 이미지 (static/images/ 폴더에 추가)
+    imageWidth: 200
+    imageHeight: 200
+    imageTitle: "Profile Image"
+
+  socialIcons:
+    - name: github
+      url: "https://github.com/ljweel"
+
+  # 검색 기능 활성화
+  Search: true
+  
+  # 다크 모드 토글
+  defaultTheme: auto
+  
+  # 코드 복사 버튼
+  ShowCodeCopyButtons: true
+  
+  # 표지 이미지
+  ShowPostNavLinks: true
+  
+  # 목차
+  ShowToc: true
+  TocOpen: false
+  
+  # 메타 정보 표시
+  ShowReadingTime: false
+  ShowWordCount: false
+  
+  # 댓글 (필요시 활성화)
+  comments: false
+  
+  # 소셜 공유 버튼
+  ShowShareButtons: true
+  
+  # Breadcrumb 네비게이션
+  ShowBreadCrumbs: true
+  
+  # 커스텀 CSS (필요시)
+  customCSS: []
+  
+  # 커스텀 JS (필요시)
+  customJS: []
+
+markup:
+  highlight:
+    noClasses: false
+    codeFences: true
+    guessSyntax: true
+    lineNos: true
+    style: github
+
+taxonomies:
+  category: categories
+  tag: tags
+  series: series
+
+enableRobotsTXT: true
+enableGitInfo: true
+
+

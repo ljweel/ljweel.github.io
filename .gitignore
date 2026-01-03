@@ -1,0 +1,27 @@
+## Hugo build output
+/public/
+
+## Hugo server
+/resources/_gen/
+
+## Hugo cache files
+.hugo_build.lock
+
+## macOS
+.DS_Store
+
+## Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+## Editor directories and files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.sublime-project
+*.sublime-workspace
+
+

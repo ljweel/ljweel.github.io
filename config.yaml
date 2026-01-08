@@ -105,6 +105,12 @@ taxonomies:
   tag: tags
   series: series
 
+frontmatter:
+  date:
+    - :git
+  lastmod:
+    - :git
+
 enableRobotsTXT: true
 enableGitInfo: true
 

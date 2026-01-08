@@ -1,8 +1,8 @@
 ---
-title: "OnPyRunner" # 리스트에 표시될 제목
+title: "OnPyRunner (1)" # 리스트에 표시될 제목
 description: "온라인 파이썬 인터프리터 플랫폼에 대한 의식의 흐름" # 제목 아래에 보일 요약문
 summary: "온라인 파이썬 인터프리터 플랫폼에 대한 의식의 흐름" # 리스트에서 미리보기로 보여줄 글자들
-tags: ['project']
+tags: ['OnPyRunner']
 categories: ['dev']
 author: "ljweel"
 showToc: true

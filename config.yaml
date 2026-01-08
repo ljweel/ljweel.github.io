@@ -78,10 +78,10 @@ params:
   ShowWordCount: false
   
   # 댓글 (필요시 활성화)
-  comments: false
+  comments: true
   
   # 소셜 공유 버튼
-  ShowShareButtons: true
+  ShowShareButtons: false
   
   # Breadcrumb 네비게이션
   ShowBreadCrumbs: true

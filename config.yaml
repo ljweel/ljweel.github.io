@@ -27,9 +27,9 @@ languages:
           url: /tags/
           weight: 30
         - identifier: archives
-          name: Archive
+          name: archive
           url: /archives/
-          weight: 30
+          weight: 40
 
 outputs:
   home:

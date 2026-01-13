@@ -43,17 +43,16 @@ sequenceDiagram
     autonumber
     actor User
     participant API as API Server
-    participant Worker as Worker 1..N
+    participant Worker as Worker Pool 1..N
     participant Sandbox
 
     Note over User, Worker: [1단계: 동기 요청 + 즉시 실행]
     User->>API: code, input POST
-    API->>Worker: 실행 요청 전달 (큐 or 내부 슬롯)
+    API->>Worker: 실행 요청 전달
 
     Note over Worker, Sandbox: [2단계: 격리 실행]
-    Worker->>Sandbox: Sandbox 생성
+    Worker->>Sandbox: Sandbox 생성 및 코드 실행
     activate Sandbox
-    Sandbox->>Sandbox: 코드 실행 (최대 n초)
     Sandbox-->>Worker: stdout / stderr / exit code
     deactivate Sandbox
 

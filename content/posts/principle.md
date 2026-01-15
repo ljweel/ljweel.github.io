@@ -5,6 +5,7 @@ summary: "프로젝트하면서 지켜야할 원칙들" # 리스트에서 미리
 tags: 
 categories: 
 author: "ljweel"
+date: 2026-01-06
 showToc: true
 TocOpen: false
 draft: false

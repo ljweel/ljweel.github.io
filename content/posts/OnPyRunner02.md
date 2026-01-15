@@ -5,6 +5,7 @@ summary: "이 글은 OnPyRunner를 구현하는 중 특정 시점에서의 생�
 tags: ['OnPyRunner']
 categories: ['dev']
 author: "ljweel"
+date: 2026-01-10
 showToc: true
 TocOpen: false
 draft: false

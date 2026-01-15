@@ -1,7 +1,7 @@
 ---
 title: "OnPyRunner (2)" # 리스트에 표시될 제목
 description: "온라인 파이썬 인터프리터 플랫폼에 대한 의식의 흐름" # 제목 아래에 보일 요약문
-summary: "온라인 파이썬 인터프리터 플랫폼에 대한 의식의 흐름" # 리스트에서 미리보기로 보여줄 글자들
+summary: "이 글은 OnPyRunner를 구현하는 중 특정 시점에서의 생각과 판단을 기록한 글입니다." # 리스트에서 미리보기로 보여줄 글자들
 tags: ['OnPyRunner']
 categories: ['dev']
 author: "ljweel"

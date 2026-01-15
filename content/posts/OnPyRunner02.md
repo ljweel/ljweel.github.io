@@ -120,5 +120,5 @@ const worker = new Worker(
 
 도커에 redis를 띄우고, node worker.js와 node app.js를 해주고 postman에서 api 요청을 날려보면 다음과 같이 나온다!
 
-![alt text](/images/OnPyRunner02_md/img01.png)
-![alt text](/images/OnPyRunner02_md/img02.png)
+![alt text](/images/OnPyRunner02/img01.png)
+![alt text](/images/OnPyRunner02/img02.png)

@@ -11,7 +11,7 @@ TocOpen: false
 draft: false
 ---
 
-## [이전 글](https://ljweel.github.io/posts/onpyrunner03/) 요약
+## [이전 글](https://ljweel.github.io/posts/onpyrunner02/) 요약
 - express와 redis의 bullMQ 도입
 - api 호출해서 worker까지 연결되는지 테스트
 

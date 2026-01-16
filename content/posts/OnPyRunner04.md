@@ -12,7 +12,7 @@ draft: false
 ---
 
 
-## [이전 글](https://ljweel.github.io/posts/onpyrunner04/) 요약
+## [이전 글](https://ljweel.github.io/posts/onpyrunner03/) 요약
 - 설계 미스로 원하던 구조의 실행기가 아니게 됨.
 - 어디서 미스난지 파악하고 설계 개선
 

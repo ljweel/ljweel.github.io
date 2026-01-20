@@ -16,7 +16,7 @@ draft: false
 Vs Code + Ubuntu 22.04(WSL) 환경에서 기본적인 환경 설정을 했다.
 
 ### CPython Clone하기 (3.9 버젼)
-```bash
+```
 git clone --branch 3.9 https://github.com/python/cpython
 cd cpython
 ```

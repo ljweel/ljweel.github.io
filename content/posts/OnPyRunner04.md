@@ -27,7 +27,7 @@ draft: false
 ### seccomp
 seccomp는 리눅스에서 sandbox 기반으로 시스템콜을 허용 및 차단하여 공격의 가능성을 막는 리눅스 보안 메커니즘이다.
 ### Nsjail
-네임스페이스, 리소스 제한 및 seccomp-bpf 시스템 호출 필터를 사용하는 Linux 프로세스 격리 도구이다. <br>
+네임스페이스, 리소스 제한 및 seccomp-bpf 시스템 호출 필터를 사용하는 Linux 프로세스 격리 도구이다.  
 내가 원하던 네트워크 격리, syscall, 자원 제한, 파일시스템 제한 등 많은 기능이 있었다.
 
 ## Nsjail로 결정
@@ -35,11 +35,11 @@ seccomp는 리눅스에서 sandbox 기반으로 시스템콜을 허용 및 차�
 [글1](https://stackoverflow.com/questions/3068139/how-can-i-sandbox-python-in-pure-python) 
 [글2](https://publish.obsidian.md/kruzenshtern/writings/2021-05-21-run-python-in-a-sandbox-with-nsjail)
 정도 유용하게 쓰였고, 글2가 많은 도움을 주었다.
-구글에서도 untrust python code를 실행시키기 위해 nsjail을 썼다고 한다. ~~그냥 자기들이 만든거 쓴거같은데~~<br>
+구글에서도 untrust python code를 실행시키기 위해 nsjail을 썼다고 한다. ~~그냥 자기들이 만든거 쓴거같은데~~  
 결론은 OnPyRunner에 Nsjail을 써서 격리환경을 구성할 것 같다.
 
 ## 테스트 주도 개발 도입
-내가 nsjail 코드를 작성하고 코드를 돌렸을 때, 내가 원했던 조건들이 적용되었는지 하나하나씩 일일이 체크하는건 어렵다. 테스트케이스를 만들어서 코드가 주어질때 stdout, stderr를 예측하도록 하기 위해 테스트 주도 개발을 하려고 한다. <br>
+내가 nsjail 코드를 작성하고 코드를 돌렸을 때, 내가 원했던 조건들이 적용되었는지 하나하나씩 일일이 체크하는건 어렵다. 테스트케이스를 만들어서 코드가 주어질때 stdout, stderr를 예측하도록 하기 위해 테스트 주도 개발을 하려고 한다.  
 runCode라는 함수에 대해서 jest를 사용해서 unit test를 진행해야겠다. 
 
 ## Test Case 만들어보기

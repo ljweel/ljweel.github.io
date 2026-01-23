@@ -19,7 +19,7 @@ draft: false
 ## 테스트 코드 추가
 ### 네트워크 차단 검증
 jail 내부에서 외부 네트워크와 연결이 되지 못해야한다. 
-socket.connet 코드가 정상적으로 Network is unreachable을 뱉는지 검사하면 된다.<br>
+socket.connet 코드가 정상적으로 Network is unreachable을 뱉는지 검사하면 된다.
 
 ### 파일 시스템 차단 검증
 #### 어떤걸 막아야할까?
@@ -44,8 +44,8 @@ Docker를 사용하자. Docker를 사용하면 일관된 환경으로 nsjail 설
 
 ## 왜 안됨?????
 /tmp와 /etc를 open하는 test가 계속 실패하는 상황이 발생했다.
-.cfg 기준으로는 mount 된 경로만 nsajil 내부에 생기게 되지만, mount 하지 않은 /tmp와 /etc가 계속 open이 되는 상황 발생<br>
--> 알고보니 clone_newns: false로 되어있었음... <br>
+.cfg 기준으로는 mount 된 경로만 nsajil 내부에 생기게 되지만, mount 하지 않은 /tmp와 /etc가 계속 open이 되는 상황 발생  
+-> 알고보니 clone_newns: false로 되어있었음... 
 clone_newns는 새 namespace를 만드는지 여부를 체크하게 되는데, false로 되어있어서, docker namespace와 nsjail namespace가 같아져서 mount하지도 않은 /tmp와 /etc가 생김. clone_newns: true를 해서 test 성공
 
 ## 추가해야할 테스트

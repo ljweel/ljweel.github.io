@@ -47,3 +47,17 @@ Job
 YES -> 같은 책임  
 NO -> 책임 분리
 
+## 동기/비동기와 블로킹/논블로킹
+- 동기/비동기
+  - 작업의 순차적 흐름 보장
+  - 작업의 완료 여부를 따지면 동기, 아니면 비동기
+  - 
+- 블로킹/논블로킹: 
+  - 현재 작업을 처리하기 위해 실행 중인 작업을 블락(차단/대기)하는지가 중요
+  - 작업을 막으면 블로킹, 아니면 논블로킹
+  - 호출한 스레드가 멈추면 블로킹, 아니면 논블로킹
+
+참고 링크
+- [완벽히 이해하는 동기/비동기 & 블로킹/논블로킹](https://inpa.tistory.com/entry/%F0%9F%91%A9%E2%80%8D%F0%9F%92%BB-%EB%8F%99%EA%B8%B0%EB%B9%84%EB%8F%99%EA%B8%B0-%EB%B8%94%EB%A1%9C%ED%82%B9%EB%85%BC%EB%B8%94%EB%A1%9C%ED%82%B9-%EA%B0%9C%EB%85%90-%EC%A0%95%EB%A6%AC#%EB%8F%99%EA%B8%B0%EC%99%80_%EB%B9%84%EB%8F%99%EA%B8%B0%EB%8A%94_%EC%9E%91%EC%97%85_%EC%88%9C%EC%84%9C_%EC%B2%98%EB%A6%AC_%EC%B0%A8%EC%9D%B4)
+
+- [블로킹(Blocking)/논블로킹(Non-Blocking), 동기(Sync)/비동기(Async) 구분하기](https://joooing.tistory.com/entry/%EB%8F%99%EA%B8%B0%EB%B9%84%EB%8F%99%EA%B8%B0-%EB%B8%94%EB%A1%9C%ED%82%B9%EB%85%BC%EB%B8%94%EB%A1%9C%ED%82%B9)

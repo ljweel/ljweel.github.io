@@ -45,24 +45,27 @@
 {{- $pages = where $pages "Params.hiddenInHomeList" "!=" "true"  }}
 {{- end }}
 
-{{- /* pinned 포스트와 일반 포스트 분리 */ -}}
+{{- /* 추가: pinned 포스트와 일반 포스트 분리 */ -}}
 {{- $pinnedPages := where $pages "Params.pinned" true }}
 {{- $regularPages := where $pages "Params.pinned" "!=" true }}
 
-{{- /* pinned 포스트를 weight 기준으로 정렬 (낮은 숫자가 위로) */ -}}
+{{- /* 추가: pinned 포스트를 weight 기준으로 정렬 (낮은 숫자가 위로) */ -}}
 {{- $pinnedPages = sort $pinnedPages "Weight" "asc" }}
 
-{{- /* 일반 포스트를 날짜 기준으로 정렬 (최신이 위로) */ -}}
+{{- /* 추가: 일반 포스트를 날짜 기준으로 정렬 (최신이 위로) */ -}}
 {{- $regularPages = sort $regularPages "Date" "desc" }}
 
-{{- if and .IsHome site.Params.homeInfoParams }}
+{{- /* 추가: 고정글은 첫 페이지에만 표시, 최신글은 페이지네이션 적용 */ -}}
+{{- $paginator := .Paginate $regularPages }}
+
+{{- if and .IsHome site.Params.homeInfoParams (eq $paginator.PageNumber 1) }}
 {{- partial "home_info.html" . }}
 {{- end }}
 
 {{- $term := .Data.Term }}
 
-{{- /* 고정글 섹션 */ -}}
-{{- if $pinnedPages }}
+{{- /* 추가: 고정글 섹션 (첫 페이지에만 표시) */ -}}
+{{- if and $pinnedPages (eq $paginator.PageNumber 1) }}
 <div class="pinned-posts-section" style="margin-bottom: 3rem;">
   <h2 class="section-header" style="font-size: 1.5rem; font-weight: 600; margin-bottom: 1.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--border);">
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle; margin-right: 0.5rem;">
@@ -82,6 +85,7 @@
     <header class="entry-header">
       <h2 class="entry-hint-parent">
         {{- .Title }}
+        {{- /* 추가: 고정 아이콘 */ -}}
         <span class="entry-hint" title="고정됨" style="color: #000000;">
           <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 17v5"/>
@@ -114,74 +118,78 @@
 </div>
 {{- end }}
 
-{{- /* 최신글 섹션 */ -}}
-{{- if $regularPages }}
+{{- /* 추가: 최신글 섹션 (첫 페이지에만 헤더 표시) */ -}}
+{{- if and $regularPages (eq $paginator.PageNumber 1) }}
 <div class="recent-posts-section">
   <h2 class="section-header" style="font-size: 1.5rem; font-weight: 600; margin-bottom: 1.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--border);">
     최신글
   </h2>
-  {{- $paginator := .Paginate $regularPages }}
-  {{- range $index, $page := $paginator.Pages }}
-  {{- $class := "post-entry" }}
-  {{- $user_preferred := or site.Params.disableSpecial1stPost site.Params.homeInfoParams }}
-  {{- if (and $.IsHome (eq $paginator.PageNumber 1) (eq $index 0) (not $user_preferred)) }}
-  {{- $class = "first-entry" }}
-  {{- else if $term }}
-  {{- $class = "post-entry tag-entry" }}
-  {{- end }}
-  <article class="{{ $class }}">
-    {{- $isHidden := (.Param "cover.hiddenInList") | default (.Param "cover.hidden") | default false }}
-    {{- partial "cover.html" (dict "cxt" . "IsSingle" false "isHidden" $isHidden) }}
-    <header class="entry-header">
-      <h2 class="entry-hint-parent">
-        {{- .Title }}
-        {{- if .Draft }}
-        <span class="entry-hint" title="Draft">
-          <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" fill="currentColor">
-            <path
-              d="M160-410v-60h300v60H160Zm0-165v-60h470v60H160Zm0-165v-60h470v60H160Zm360 580v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q9 9 13 20t4 22q0 11-4.5 22.5T862.09-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z" />
-          </svg>
-        </span>
-        {{- end }}
-      </h2>
-    </header>
-    {{- if (ne (.Param "hideSummary") true) }}
-    <div class="entry-content">
-      <p>{{ .Summary | plainify | htmlUnescape }}{{ if .Truncated }}...{{ end }}</p>
-    </div>
-    {{- end }}
-    {{- if not (.Param "hideMeta") }}
-    <footer class="entry-footer">
-      {{- partial "post_meta.html" . -}}
-    </footer>
-    {{- end }}
-    <a class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
-  </article>
-  {{- end }}
-  
-  {{- if gt $paginator.TotalPages 1 }}
-  <footer class="page-footer">
-    <nav class="pagination">
-      {{- if $paginator.HasPrev }}
-      <a class="prev" href="{{ $paginator.Prev.URL | absURL }}">
-        «&nbsp;{{ i18n "prev_page" }}&nbsp;
-        {{- if (.Param "ShowPageNums") }}
-        {{- sub $paginator.PageNumber 1 }}/{{ $paginator.TotalPages }}
-        {{- end }}
-      </a>
+{{- end }}
+{{- /* 테마 원본: 페이지네이션된 포스트 표시 */ -}}
+{{- range $index, $page := $paginator.Pages }}
+{{- $class := "post-entry" }}
+{{- $user_preferred := or site.Params.disableSpecial1stPost site.Params.homeInfoParams }}
+{{- if (and $.IsHome (eq $paginator.PageNumber 1) (eq $index 0) (not $user_preferred)) }}
+{{- $class = "first-entry" }}
+{{- else if $term }}
+{{- $class = "post-entry tag-entry" }}
+{{- end }}
+<article class="{{ $class }}">
+  {{- $isHidden := (.Param "cover.hiddenInList") | default (.Param "cover.hidden") | default false }}
+  {{- partial "cover.html" (dict "cxt" . "IsSingle" false "isHidden" $isHidden) }}
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">
+      {{- .Title }}
+      {{- if .Draft }}
+      <span class="entry-hint" title="Draft">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" fill="currentColor">
+          <path
+            d="M160-410v-60h300v60H160Zm0-165v-60h470v60H160Zm0-165v-60h470v60H160Zm360 580v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q9 9 13 20t4 22q0 11-4.5 22.5T862.09-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z" />
+        </svg>
+      </span>
       {{- end }}
-      {{- if $paginator.HasNext }}
-      <a class="next" href="{{ $paginator.Next.URL | absURL }}">
-        {{- i18n "next_page" }}&nbsp;
-        {{- if (.Param "ShowPageNums") }}
-        {{- add 1 $paginator.PageNumber }}/{{ $paginator.TotalPages }}
-        {{- end }}&nbsp;»
-      </a>
-      {{- end }}
-    </nav>
+    </h2>
+  </header>
+  {{- if (ne (.Param "hideSummary") true) }}
+  <div class="entry-content">
+    <p>{{ .Summary | plainify | htmlUnescape }}{{ if .Truncated }}...{{ end }}</p>
+  </div>
+  {{- end }}
+  {{- if not (.Param "hideMeta") }}
+  <footer class="entry-footer">
+    {{- partial "post_meta.html" . -}}
   </footer>
   {{- end }}
+  <a class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
+</article>
+{{- end }}
+{{- /* 최신글 섹션 닫기 */ -}}
+{{- if and $regularPages (eq $paginator.PageNumber 1) }}
 </div>
+{{- end }}
+
+{{- /* 테마 원본: 페이지네이션 footer */ -}}
+{{- if gt $paginator.TotalPages 1 }}
+<footer class="page-footer">
+  <nav class="pagination">
+    {{- if $paginator.HasPrev }}
+    <a class="prev" href="{{ $paginator.Prev.URL | absURL }}">
+      «&nbsp;{{ i18n "prev_page" }}&nbsp;
+      {{- if (.Param "ShowPageNums") }}
+      {{- sub $paginator.PageNumber 1 }}/{{ $paginator.TotalPages }}
+      {{- end }}
+    </a>
+    {{- end }}
+    {{- if $paginator.HasNext }}
+    <a class="next" href="{{ $paginator.Next.URL | absURL }}">
+      {{- i18n "next_page" }}&nbsp;
+      {{- if (.Param "ShowPageNums") }}
+      {{- add 1 $paginator.PageNumber }}/{{ $paginator.TotalPages }}
+      {{- end }}&nbsp;»
+    </a>
+    {{- end }}
+  </nav>
+</footer>
 {{- end }}
 
 {{- end }}{{/* end profileMode */}}

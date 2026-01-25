@@ -50,7 +50,7 @@ params:
   profileMode:
     enabled: true
     title: "이정우  ljweel"
-    subtitle: "Python과 Backend에 관심이 있습니다 · 장어라고 불러주시면 됩니다"
+    subtitle: "Python과 code golf를 좋아합니다 · 장어라고 불러주시면 됩니다"
     imageUrl: "images/profile.png"  # 프로필 이미지 (static/images/ 폴더에 추가)
     imageWidth: 200
     imageHeight: 200

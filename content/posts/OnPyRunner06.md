@@ -91,7 +91,7 @@ Redis를 선택한 이유는 비동기 처리를 위해서가 아니라
 이 역할은 Redis가 아니어도 수행할 수 있다. 단지 이런 요구사항을 가장 간단하게 만족시키는 구현 선택지 중 하나일 뿐이다.
 
 그래서 결론적으로는,  
-OnPyRunner의 API에 **Redis 기반의 작업 큐 + 상태 저장 구조를 사용하자** 라는 판단에 도달했다.
+OnPyRunner의 API에 **Redis 기반의 웹 - 큐 - 워커 구조를 사용하자** 라는 판단에 도달했다.
 
 ## 출처
 - [웹-큐-워커 아키텍처 스타일](https://learn.microsoft.com/ko-kr/azure/architecture/guide/architecture-styles/web-queue-worker)

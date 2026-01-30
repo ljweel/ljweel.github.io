@@ -75,7 +75,7 @@ Python 코드는 어차피 nsjail 내부에서 동기적으로 실행된다. 이
 
 Redis를 도입하면 다음이 가능해진다.
 - 실행 요청을 즉시 받아서 큐에 넣고 HTTP 요청은 빠르게 종료
-- 실행 상태(RUNNING / DONE / ERROR)를 Redis에 저장
+- 실행 상태(PEDDING | RUNNING | COMPLETED)를 Redis에 저장
 - 결과 역시 Redis를 통해 조회 가능
 - 워커 프로세스 수를 조절해 동시 실행량을 제어
 

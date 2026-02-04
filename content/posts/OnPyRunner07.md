@@ -21,11 +21,12 @@ draft: false
 job의 상태 정의
 - PENDING: 아직 RUNNING이 아닌 상태
 - RUNNING: 실제로 실행됨.
-- COMPLETED: 실행이 완료됨.
-- FAILED: 실행이 실패함.
+- COMPLETED: 실행이 완료됨. 코드의 결함은 사용자의 책임
+- FAILED: 실행이 실패함. 시스템 설계의 책임.
 
 Runtime Error는 COMPLETED일까 FAILED일까?  
--> **job실행 상태**를 기반으로 정의하는 거지, 파이썬 코드의 성공 여부를 따지는 것이 아니므로  COMPLETED에 속함.
+-> **job실행 상태**를 기반으로 정의하는 거지, 파이썬 코드의 성공 여부를 따지는 것이 아니므로  COMPLETED에 속함. 
+> COMPLETED는 사용자의 책임, FAILED는 시스템 설계의 책임
 
 ```mermaid
 stateDiagram-v2

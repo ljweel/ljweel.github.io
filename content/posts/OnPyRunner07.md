@@ -51,7 +51,7 @@ job의 상태 다이어그램을 기반으로 post와 get의 요청과 응답의
 - response
   - 필수적인거 job_id, status(PENDING)
 - 기본적인 의사코드
-    ```
+    ```text
     def execute(request):
         validate request
         create job id
@@ -75,7 +75,7 @@ job의 상태 다이어그램을 기반으로 post와 get의 요청과 응답의
   - FAILED
     - 필수: job_id, status, reason(실패 사유)
 - 의사 코드
-    ```
+    ```text
     def get_job(job_id):
         load job state from redis
         convert job state to json

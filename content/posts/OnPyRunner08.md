@@ -31,7 +31,7 @@ flowchart LR
 그래서 worker.py를 짜야하는데 위 흐름도에서 코드 실행(Nsjail) + 결과 저장 / 응답에 해당한다. worker가 하는 일을 의사코드로 나타내               면 다음과 같다.
 
 
-```plain
+```plain {linenos=false}
 1. queue에서 payload pop
 2. payload json 에서 dict로 변환 
 3. job의 상태를 RUNNING으로 바꾸기

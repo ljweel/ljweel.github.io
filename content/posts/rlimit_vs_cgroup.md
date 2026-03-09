@@ -16,7 +16,7 @@ draft: false
 OnPyRunner에서 사용자 코드의 메모리를 제한하기 위해 nsjail을 사용한다.
 nsjail은 내부적으로 **rlimit**과 **cgroup** 두 가지 메커니즘으로 메모리를 제한할 수 있다.
 
-```
+```text
 # nsjail.cfg
 rlimit_as: 128          # 가상 주소 공간 128MB 제한
 cgroup_mem_max: 134217728  # 물리 메모리 128MB 제한 (cgroup)
@@ -40,7 +40,7 @@ exit_code 137(SIGKILL)이 발생했을 때, 이것이 TLE(Time Limit Exceeded)�
 
 물리 메모리는 해당 가상 주소에 **처음 접근(read/write)할 때** 페이지 단위(보통 4KB)로 할당된다. 이를 **demand paging**이라 하며, 첫 접근 시 **page fault**가 발생하고 커널이 물리 페이지를 매핑한다.
 
-```
+```text
 malloc(100MB) 직후  → 가상 주소 공간 100MB 예약, 물리 메모리 ~0
 50MB 영역에 write   → 가상 100MB, 물리 ~50MB
 100MB 전부 write    → 가상 100MB, 물리 ~100MB
@@ -125,7 +125,7 @@ Python 프로세스가 시작할 때 libc, libpython 등 공유 라이브러리�
 - page cache는 커널이 관리하는 영역이다. 프로세스의 가상 주소 공간에 매핑되지 않으므로 **rlimit_as에 카운트되지 않는다**.
 - 그러나 **cgroup memory accounting에서는 page cache도 해당 cgroup에 청구**된다.
 
-```
+```text
 read('huge_file.txt') 실행 시:
 
 프로세스 관점:
@@ -142,7 +142,7 @@ read('huge_file.txt') 실행 시:
 
 rlimit_as는 **프로세스 개별** 단위로 적용되지만, cgroup_mem_max는 **cgroup 전체** (부모 + 자식 프로세스 합산) 단위로 적용된다.
 
-```
+```text
 fork()를 여러 번 실행한 경우:
 
 rlimit_as: 각 프로세스가 개별적으로 128MB 이내 → 제한에 걸리지 않음
@@ -177,7 +177,7 @@ rlimit_as와 cgroup_mem_max가 같은 값으로 설정되어 있고, 사용자 �
 
 `cgroup_mem_max`를 `rlimit_as`보다 **낮게** 설정하면 된다.
 
-```
+```text
 rlimit_as: 128           # 가상 주소 공간 128MB
 cgroup_mem_max: 13421     # 물리 메모리 ~13KB
 ```

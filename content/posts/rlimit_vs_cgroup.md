@@ -192,19 +192,6 @@ except:
 
 ---
 
-## 만약 cgroup이 먼저 발동하게 하려면?
-
-`cgroup_mem_max`를 `rlimit_as`보다 **낮게** 설정하면 된다.
-
-```text
-rlimit_as: 128           # 가상 주소 공간 128MB
-cgroup_mem_max: 13421     # 물리 메모리 ~13KB
-```
-
-이 경우 Python 인터프리터 자체가 시작할 때 물리 메모리 사용량이 즉시 한도를 초과하여 OOM Kill된다. Python 코드가 한 줄도 실행되지 않고 exit_code 137이 발생한다.
-
----
-
 ## 한줄 정리
 
 - **rlimit_as**: 프로세스의 가상 주소 공간(VAS) 총합을 제한한다. `brk`/`mmap` 시점에 체크.

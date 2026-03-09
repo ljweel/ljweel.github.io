@@ -157,7 +157,28 @@ cgroup_mem_max: 부모 + 자식 프로세스의 물리 메모리 합산 → 128M
 
 ## OnPyRunner에서의 실제 판별 로직
 
-현재 설정(`rlimit_as: 128`, `cgroup_mem_max: 134217728`, 둘 다 128MB)에서, 사용자 코드가 **순수한 메모리 할당**으로 메모리를 초과하는 일반적인 경우:
+이 판별 로직은 다음 두 가지 전제 조건 위에서 성립한다.
+
+### 전제 1: nsjail이 fork와 파일 I/O를 제한한다
+
+OnPyRunner의 nsjail 설정에서는 fork/clone이 제한되고, 사용자 코드가 접근할 수 있는 파일 시스템이 최소화되어 있다. 따라서 앞서 다룬 예외 상황(page cache 누적, 다중 프로세스의 cgroup 합산)이 발생할 가능성이 낮다. 이 덕분에 MLE는 cgroup OOM Kill(exit_code 137)이 아닌 rlimit_as에 의한 `MemoryError`(exit_code 1)로 나타난다고 기대할 수 있다.
+
+### 전제 2: MemoryError를 except로 잡아도 문제없다
+
+사용자가 `except`로 `MemoryError`를 잡으면 exit_code 1이 아닌 0으로 정상 종료될 수 있다.
+
+```python
+try:
+    a = [1] * 1000000000
+except:
+    pass  # MemoryError가 잡혀서 exit_code 0으로 종료
+```
+
+그러나 이 경우 프로그램이 crash 없이 실행을 계속한 것이므로, MLE가 아닌 정상 종료(SUCCESS)로 판정하는 것이 적절하다. 메모리 한도에 도달했더라도 프로그램 스스로 이를 처리한 것이기 때문이다.
+
+### 판별 로직
+
+위 전제 조건 하에서, 현재 설정(`rlimit_as: 128`, `cgroup_mem_max: 134217728`, 둘 다 128MB)의 판별 로직은 다음과 같다:
 
 | exit_code | stderr 내용 | 판정 |
 |-----------|-------------|------|
@@ -166,8 +187,6 @@ cgroup_mem_max: 부모 + 자식 프로세스의 물리 메모리 합산 → 128M
 | 1 | 그 외 | RUNTIME_ERROR |
 | 137 | - | TIME_LIMIT_EXCEEDED |
 | 그 외 | - | UNKNOWN_ERROR |
-
-rlimit_as와 cgroup_mem_max가 같은 값으로 설정되어 있고, 사용자 코드가 대량의 파일 I/O나 fork를 수행하지 않는 한, MLE는 Python의 `MemoryError`(exit_code 1)로 나타난다. 따라서 exit_code 137은 TLE로 판정하는 것이 현재 설정에서는 합리적이다.
 
 단, 향후 입력 크기 제한을 늘리거나, 사용자 코드가 파일 I/O를 수행할 수 있는 환경이 된다면, exit_code 137이 MLE일 가능성도 고려해야 한다. 이 경우 cgroup의 `memory.events` 파일에서 OOM 발생 여부를 확인하는 방식으로 TLE와 MLE를 구분할 수 있다.
 

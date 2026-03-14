@@ -1,7 +1,7 @@
 ---
-title: "OnPyRunner (3)" # 리스트에 표시될 제목
-description: "온라인 파이썬 실행기에 대한 의식의 흐름" # 제목 아래에 보일 요약문
-summary: "이 글은 OnPyRunner를 구현하는 중 특정 시점에서의 생각과 판단을 기록한 글입니다." # 리스트에서 미리보기로 보여줄 글자들
+title: "3. 설계 미스와 동기 전환"
+description: "비동기 구조가 프로젝트 본질에 맞지 않음을 깨닫고 동기 실행으로 회귀한 과정"
+summary: "비동기 메시지 큐가 병목을 해결해주지 않는다는 사실을 인지하고, 간단한 실행기라는 본질에 맞게 동기 구조로 재설계했습니다."
 tags: ['OnPyRunner']
 categories: ['dev']
 author: "ljweel"

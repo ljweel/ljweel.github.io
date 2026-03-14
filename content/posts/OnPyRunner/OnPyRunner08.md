@@ -1,7 +1,7 @@
 ---
-title: "OnPyRunner (8)" # 리스트에 표시될 제목
-description: "온라인 파이썬 실행기에 대한 의식의 흐름" # 제목 아래에 보일 요약문
-summary: "이 글은 OnPyRunner를 구현하는 중 특정 시점에서의 생각과 판단을 기록한 글입니다." # 리스트에서 미리보기로 보여줄 글자들
+title: "8. Worker 흐름과 Nsjail 추상화"
+description: "Worker의 데이터 흐름을 설계하고 Nsjail 클래스로 샌드박스 실행을 추상화한 과정"
+summary: "Worker가 Queue에서 Job을 가져와 Nsjail로 실행하고 결과를 분석하는 전체 흐름을 설계하며, NsjailResult를 통한 추상화를 구현했습니다."
 tags: ['OnPyRunner']
 categories: ['dev']
 author: "ljweel"

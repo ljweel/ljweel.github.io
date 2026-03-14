@@ -1,7 +1,7 @@
 ---
-title: "OnPyRunner (9)" # 리스트에 표시될 제목
-description: "온라인 파이썬 실행기에 대한 의식의 흐름" # 제목 아래에 보일 요약문
-summary: "이 글은 OnPyRunner를 구현하는 중 특정 시점에서의 생각과 판단을 기록한 글입니다." # 리스트에서 미리보기로 보여줄 글자들
+title: "9. 테스트 자동화와 cgroup 삽질"
+description: "pytest 기반 테스트 자동화를 구축하고, Docker 내부 cgroup v2 설정을 해결한 과정"
+summary: "docker compose watch로 개발 루프를 자동화하고, cgroup v2의 no internal processes rule을 이해하여 fork bomb 방지했습니다."
 tags: ['OnPyRunner']
 categories: ['dev']
 author: "ljweel"

@@ -1,7 +1,7 @@
 ---
-title: "OnPyRunner (10)" # 리스트에 표시될 제목
-description: "온라인 파이썬 실행기에 대한 의식의 흐름" # 제목 아래에 보일 요약문
-summary: "이 글은 OnPyRunner를 구현하는 중 특정 시점에서의 생각과 판단을 기록한 글입니다." # 리스트에서 미리보기로 보여줄 글자들
+title: "10. 배포와 오픈"
+description: "MVP를 완성하고 Cloudflare 터널 + Nginx로 배포하여 서비스를 공개한 과정"
+summary: "전체 실행 흐름을 시퀀스 다이어그램으로 정리하고, UI를 제작한 뒤 run.ljweel.dev로 서비스를 오픈했습니다."
 tags: ['OnPyRunner']
 categories: ['dev']
 author: "ljweel"

@@ -1,7 +1,7 @@
 ---
-title: "OnPyRunner (7)" # 리스트에 표시될 제목
-description: "온라인 파이썬 실행기에 대한 의식의 흐름" # 제목 아래에 보일 요약문
-summary: "이 글은 OnPyRunner를 구현하는 중 특정 시점에서의 생각과 판단을 기록한 글입니다." # 리스트에서 미리보기로 보여줄 글자들
+title: "7. Job 상태 머신과 API 설계"
+description: "Job의 상태 전이를 정의하고 POST /execute, GET /jobs API를 구체적으로 설계한 과정"
+summary: "PENDING·RUNNING·COMPLETED·FAILED 상태 다이어그램을 정의하고, 각 API의 요청·응답 구조와 의사코드를 설계했습니다."
 tags: ['OnPyRunner']
 categories: ['dev']
 author: "ljweel"

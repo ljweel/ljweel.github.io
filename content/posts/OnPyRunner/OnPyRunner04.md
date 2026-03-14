@@ -1,7 +1,7 @@
 ---
-title: "OnPyRunner (4)" # 리스트에 표시될 제목
-description: "온라인 파이썬 실행기에 대한 의식의 흐름" # 제목 아래에 보일 요약문
-summary: "이 글은 OnPyRunner를 구현하는 중 특정 시점에서의 생각과 판단을 기록한 글입니다." # 리스트에서 미리보기로 보여줄 글자들
+title: "4. Nsjail 도입과 TDD 시작"
+description: "샌드박스 격리를 위해 Nsjail을 선택하고, Jest 기반 테스트 주도 개발을 시작한 과정"
+summary: "신뢰할 수 없는 코드 실행을 위해 Nsjail을 도입하고, runCode 함수에 대한 테스트 케이스를 작성하며 첫 샌드박스 실행에 성공했습니다."
 tags: ['OnPyRunner']
 categories: ['dev']
 author: "ljweel"

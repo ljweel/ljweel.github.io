@@ -1,7 +1,7 @@
 ---
-title: "OnPyRunner (2)" # 리스트에 표시될 제목
-description: "온라인 파이썬 인터프리터 플랫폼에 대한 의식의 흐름" # 제목 아래에 보일 요약문
-summary: "이 글은 OnPyRunner를 구현하는 중 특정 시점에서의 생각과 판단을 기록한 글입니다." # 리스트에서 미리보기로 보여줄 글자들
+title: "2. Express와 BullMQ로 첫 구현"
+description: "설계를 코드로 옮기며 API-Queue-Worker 파이프라인을 처음 연결한 과정"
+summary: "Express와 BullMQ를 도입하고, app.js·queue.js·worker.js를 작성하여 API 호출이 Worker까지 도달하는지 테스트했습니다."
 tags: ['OnPyRunner']
 categories: ['dev']
 author: "ljweel"

@@ -1,7 +1,7 @@
 ---
-title: "OnPyRunner (6)" # 리스트에 표시될 제목
-description: "온라인 파이썬 실행기에 대한 의식의 흐름" # 제목 아래에 보일 요약문
-summary: "이 글은 OnPyRunner를 구현하는 중 특정 시점에서의 생각과 판단을 기록한 글입니다." # 리스트에서 미리보기로 보여줄 글자들
+title: "6. Redis의 본질과 MVP 재정의"
+description: "동기/비동기·블로킹/논블로킹 개념을 재정립하고 Redis 도입의 진짜 이유를 깨달은 과정"
+summary: "Redis는 비동기를 위한 도구가 아니라 Job의 생명주기를 HTTP 요청에서 분리하기 위한 장치임을 깨닫고, 웹-큐-워커 아키텍처로 정했습니다."
 tags: ['OnPyRunner']
 categories: ['dev']
 author: "ljweel"

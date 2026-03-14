@@ -1,7 +1,7 @@
 ---
-title: "OnPyRunner (5)" # 리스트에 표시될 제목
-description: "온라인 파이썬 실행기에 대한 의식의 흐름" # 제목 아래에 보일 요약문
-summary: "이 글은 OnPyRunner를 구현하는 중 특정 시점에서의 생각과 판단을 기록한 글입니다." # 리스트에서 미리보기로 보여줄 글자들
+title: "5. Docker 도입과 테스트 환경 구축"
+description: "로컬 nsjail 테스트의 한계를 Docker로 극복하고 파일시스템 격리를 검증한 과정"
+summary: "로컬 우분투에서의 nsjail 디버깅 지옥을 겪은 뒤 Docker를 도입하여 일관된 개발 환경을 구축하고, clone_newns 이슈를 해결했습니다."
 tags: ['OnPyRunner']
 categories: ['dev']
 author: "ljweel"

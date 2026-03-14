@@ -19,7 +19,7 @@
 {{- end }}
 
 {{- /* GoatCounter 조회수 */ -}}
-{{- $scratch.Add "meta" (slice "<span id='gc-views'>조회수 로딩...</span>") }}
+{{- $scratch.Add "meta" (slice (printf "<span class='gc-views' data-path='%s'>조회수 ...</span>" .RelPermalink)) }}
 
 
 {{- with ($scratch.Get "meta") }}

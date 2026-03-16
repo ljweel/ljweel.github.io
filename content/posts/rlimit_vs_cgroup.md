@@ -2,7 +2,7 @@
 title: "rlimit vs cgroup: 메모리 제한의 두 가지 레이어"
 description: "OnPyRunner에서 샌드박스 메모리 설정 중 rlimit과 cgroup의 차이를 서술한 글입니다."
 summary: "rlimit과 cgroup의 차이를 서술한 글입니다."
-tags: ['Linux']
+tags: ['Linux', 'OnPyRunner']
 categories: ['dev']
 author: "ljweel"
 date: 2026-03-06

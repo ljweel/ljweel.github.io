@@ -139,7 +139,7 @@ with ThreadPoolExecutor(max_workers=2) as executor:
     stderr = stderr_future.result()
 ```
 
-이 구조를 사용하여 데드락을 방지하면서 stdout 256KB, stderr 256KB 각각 독립적으로 제한할 수 있게 되었다.  
+이 구조를 사용하여 데드락을 방지하면서 stdout 128KB, stderr 128KB 각각 독립적으로 제한할 수 있게 되었다.  
 또한 [web page](https://run.ljweel.dev)에서 stdout/stdeer이 초과될 경우 alert()를 호출하도록 하여 UX를 개선하였다.
 
 ## 참고 자료

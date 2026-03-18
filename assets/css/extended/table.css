@@ -1,0 +1,19 @@
+.post-content table, td, th {
+  overflow: visible;
+}
+
+.post-content table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.post-content th,
+.post-content td {
+  border: 1px solid var(--tertiary, #ddd);
+  padding: 8px 12px;
+}
+
+.post-content th {
+  background-color: var(--code-bg, #f6f6f6);
+}
+

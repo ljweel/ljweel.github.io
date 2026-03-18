@@ -26,11 +26,6 @@
   opacity: 1;
 }
 
-
-.post-content table, td, th {
-  overflow: visible;
-}
-
 .tooltip.active .tooltip-text {
   visibility: visible;
   opacity: 1;

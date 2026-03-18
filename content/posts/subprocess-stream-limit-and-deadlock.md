@@ -6,8 +6,6 @@ tags: ['OnPyRunner', 'Python', 'subprocess', 'Deadlock']
 categories: ['Troubleshooting']
 author: "ljweel"
 date: 2026-03-16
-showToc: true
-TocOpen: false
 draft: false
 ---
 

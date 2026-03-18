@@ -6,8 +6,6 @@ tags: ['interview']
 categories: ['취준']
 author: "ljweel"
 date: 2026-01-01
-showToc: true
-TocOpen: false
 draft: false
 ---
 

@@ -6,8 +6,6 @@ tags: ['Linux', 'OnPyRunner']
 categories: ['dev']
 author: "ljweel"
 date: 2026-03-06
-showToc: true
-TocOpen: false
 draft: false
 ---
 

@@ -6,11 +6,7 @@ tags: ['memo']
 categories: ['study']
 author: "ljweel"
 date: 2026-01-22
-showToc: true
-TocOpen: false
 draft: false
-pinned: true
-weight: 0
 ---
 
 ## Request vs Job

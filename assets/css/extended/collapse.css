@@ -1,0 +1,29 @@
+.post-content details {
+  border: 1px solid var(--tertiary, #ddd);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 1em 0;
+  background-color: var(--entry, #f0f0f0);
+}
+
+.post-content details .highlight {
+  background-color: var(--code-block-bg, #2e2e33);
+  border-radius: 6px;
+}
+
+.post-content details summary {
+  cursor: pointer;
+  font-weight: 600;
+  padding: 4px 0;
+  color: var(--primary, #222);
+}
+
+.post-content details summary::marker {
+  color: var(--secondary, #888);
+}
+
+.post-content details[open] summary {
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--tertiary, #ddd);
+  padding-bottom: 8px;
+}

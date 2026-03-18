@@ -1,12 +1,12 @@
-@media (min-width: 1280px) {
-  .post-content {
-    max-width: 750px;
+@media (min-width: 1530px) {
+  .main {
+    max-width: 960px;
   }
 
   .toc {
     position: fixed;
     top: 100px;
-    right: calc((100vw - 750px) / 2 - 280px);
+    left: calc(50% + 480px + 20px);
     width: 250px;
     max-height: calc(100vh - 150px);
     overflow-y: auto;
@@ -24,14 +24,10 @@
   }
 
   .toc details summary {
-    font-weight: 700;
-    font-size: 0.9em;
-    color: var(--secondary);
-    margin-bottom: 8px;
-    border: none;
-    padding: 0;
+    list-style: none;
+    cursor: default;
   }
-
+  
   .toc .inner ul {
     list-style: none;
     padding-left: 0;

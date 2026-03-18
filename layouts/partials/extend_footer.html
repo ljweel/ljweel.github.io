@@ -34,6 +34,19 @@
 
     setTimeout(function() { clearInterval(t); }, 5000);
 })();
+
+
+document.addEventListener('click', function(e) {
+  const tooltip = e.target.closest('.tooltip');
+  if (tooltip) {
+    tooltip.classList.toggle('active');
+  } else {
+    document.querySelectorAll('.tooltip.active').forEach(function(el) {
+      el.classList.remove('active');
+    });
+  }
+});
+
 </script>
 
 {{- /* Footer custom content area end */ -}}

@@ -97,6 +97,9 @@ params:
   ShowDate: true
   ShowLastMod: false
 markup:
+  goldmark:
+    renderer:
+      unsafe: true
   highlight:
     noClasses: false
     codeFences: true

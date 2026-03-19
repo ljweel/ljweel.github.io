@@ -47,26 +47,24 @@ document.addEventListener('click', function(e) {
   }
 });
 
+
 function adjustTooltip(tip) {
-  var text = tip.querySelector('.tooltip-text');
+  const text = tip.querySelector('.tooltip-text');
   if (!text) return;
 
-  if (window.innerWidth < 1300) {
-    var post = tip.closest('.post-content');
-    if (!post) return;
+  const tipRect = tip.getBoundingClientRect();
+  const tipCenter = tipRect.left + tipRect.width / 2; // 툴팁의 수평 중앙 위치
 
-    var tipRect = tip.getBoundingClientRect();
-    var postRect = post.getBoundingClientRect();
+  // 1. 왼쪽 끝까지의 거리: tipCenter - 0
+  const distFromLeft = tipCenter;
+  // 2. 오른쪽 끝까지의 거리: 브라우저 너비 - tipCenter
+  const distFromRight = window.innerWidth - tipCenter;
 
-    var tipCenter = tipRect.left + tipRect.width / 2;
-    var distFromLeft = tipCenter - postRect.left;
-    var distFromRight = postRect.right - tipCenter;
-    var maxByPosition = Math.min(distFromLeft, distFromRight) * 2 - 20;
+  // 두 거리 중 최소값의 2배 (여백 20px 제외)
+  const maxW = Math.min(distFromLeft, distFromRight) * 2 - 20;
 
-    text.style.maxWidth = Math.min(500, maxByPosition) + 'px';
-  } else {
-    text.style.maxWidth = '500px';
-  }
+  // CSS 변수로 전달하거나 직접 스타일 적용
+  text.style.maxWidth = `${Math.min(500, maxW)}px`;
 }
 
 document.querySelectorAll('.tooltip').forEach(adjustTooltip);
@@ -75,6 +73,7 @@ document.querySelectorAll('.tooltip').forEach(adjustTooltip);
 window.addEventListener('resize', function() {
   document.querySelectorAll('.tooltip').forEach(adjustTooltip);
 });
+
 
 </script>
 

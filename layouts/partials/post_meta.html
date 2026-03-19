@@ -19,8 +19,15 @@
 {{- end }}
 
 {{- /* GoatCounter 조회수 */ -}}
-{{- $scratch.Add "meta" (slice (printf "<span class='gc-views' data-path='%s'>조회수 ...</span>" .RelPermalink)) }}
-
+{{- if .IsSection -}}
+  {{- $paths := slice -}}
+  {{- range .RegularPages -}}
+    {{- $paths = $paths | append .RelPermalink -}}
+  {{- end -}}
+  {{- $scratch.Add "meta" (slice (printf "<span class='gc-views gc-views-bundle' data-children='%s'>조회수 ...</span>" (delimit $paths ","))) }}
+{{- else -}}
+  {{- $scratch.Add "meta" (slice (printf "<span class='gc-views' data-path='%s'>조회수 ...</span>" .RelPermalink)) }}
+{{- end -}}
 
 {{- with ($scratch.Get "meta") }}
 {{- delimit . "&nbsp;·&nbsp;" | safeHTML -}}

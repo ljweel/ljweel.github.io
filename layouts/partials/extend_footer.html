@@ -6,35 +6,61 @@
     var elements = document.querySelectorAll('.gc-views');
     if (!elements.length) return;
 
+    var baseUrl = 'https://ljweel-github-pages.goatcounter.com/counter/';
+
+    function fetchCount(path, callback) {
+        var r = new XMLHttpRequest();
+        r.addEventListener('load', function() {
+            if (r.status === 200) {
+                var raw = JSON.parse(r.responseText).count;
+                var num = parseInt(raw.replace(/[^0-9]/g, ''), 10) || 0;
+                callback(num);
+            } else {
+                callback(0);
+            }
+        });
+        r.addEventListener('error', function() { callback(0); });
+        r.open('GET', baseUrl + encodeURIComponent(path) + '.json');
+        r.send();
+    }
+
     var t = setInterval(function() {
         if (window.goatcounter && window.goatcounter.visit_count) {
             clearInterval(t);
 
             elements.forEach(function(el) {
-                var path = el.getAttribute('data-path');
-                if (!path) return;
+                var children = el.getAttribute('data-children');
 
-                var r = new XMLHttpRequest();
-                r.addEventListener('load', function() {
-                    if (r.status === 200) {
-                        var data = JSON.parse(r.responseText);
-                        el.textContent = '조회수 ' + data.count;
-                    } else {
-                        el.textContent = '';
-                    }
-                });
-                r.addEventListener('error', function() {
-                    el.textContent = '';
-                });
-                r.open('GET', 'https://ljweel-github-pages.goatcounter.com/counter/' + encodeURIComponent(path) + '.json');
-                r.send();
+                if (children) {
+                    // 번들: 하위 글들의 조회수 합산
+                    var paths = children.split(',');
+                    var total = 0;
+                    var done = 0;
+
+                    paths.forEach(function(path) {
+                        fetchCount(path, function(count) {
+                            total += count;
+                            done++;
+                            if (done === paths.length) {
+                                el.textContent = '조회수 ' + total.toLocaleString();
+                            }
+                        });
+                    });
+                } else {
+                    // 일반 글: 개별 조회수
+                    var path = el.getAttribute('data-path');
+                    if (!path) return;
+
+                    fetchCount(path, function(count) {
+                        el.textContent = count > 0 ? '조회수 ' + count.toLocaleString() : '';
+                    });
+                }
             });
         }
     }, 100);
 
     setTimeout(function() { clearInterval(t); }, 5000);
 })();
-
 
 document.addEventListener('click', function(e) {
   const tooltip = e.target.closest('.tooltip');
@@ -73,6 +99,10 @@ document.querySelectorAll('.tooltip').forEach(adjustTooltip);
 window.addEventListener('resize', function() {
   document.querySelectorAll('.tooltip').forEach(adjustTooltip);
 });
+
+
+
+
 
 
 </script>

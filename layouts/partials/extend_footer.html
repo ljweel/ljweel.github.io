@@ -47,6 +47,35 @@ document.addEventListener('click', function(e) {
   }
 });
 
+function adjustTooltip(tip) {
+  var text = tip.querySelector('.tooltip-text');
+  if (!text) return;
+
+  if (window.innerWidth < 1300) {
+    var post = tip.closest('.post-content');
+    if (!post) return;
+
+    var tipRect = tip.getBoundingClientRect();
+    var postRect = post.getBoundingClientRect();
+
+    var tipCenter = tipRect.left + tipRect.width / 2;
+    var distFromLeft = tipCenter - postRect.left;
+    var distFromRight = postRect.right - tipCenter;
+    var maxByPosition = Math.min(distFromLeft, distFromRight) * 2 - 20;
+
+    text.style.maxWidth = Math.min(500, maxByPosition) + 'px';
+  } else {
+    text.style.maxWidth = '500px';
+  }
+}
+
+document.querySelectorAll('.tooltip').forEach(adjustTooltip);
+
+// 창 크기 변경 시 재계산
+window.addEventListener('resize', function() {
+  document.querySelectorAll('.tooltip').forEach(adjustTooltip);
+});
+
 </script>
 
 {{- /* Footer custom content area end */ -}}

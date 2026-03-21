@@ -1,0 +1,12 @@
+{{- $title := "" -}}
+{{- with .Attributes.title -}}
+  {{- $title = . -}}
+{{- end -}}
+{{- if $title }}
+<div class="code-block-wrapper">
+  <div class="code-block-title">{{ $title }}</div>
+  {{ highlight .Inner .Type .Options }}
+</div>
+{{- else }}
+{{ highlight .Inner .Type .Options }}
+{{- end }}

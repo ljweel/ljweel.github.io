@@ -1,0 +1,21 @@
+.code-block-wrapper {
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 1em 0;
+  background-color: var(--code-block-bg, #2e2e33);
+}
+
+.code-block-wrapper .code-block-title {
+  padding: 6px 14px;
+  font-size: 0.85em;
+  color: #d4d4d4;
+  font-family: consolas, monaco, courier new, monospace !important;
+  border-bottom: 1px solid var(--tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.code-block-wrapper .highlight {
+  margin: 0 !important;
+}

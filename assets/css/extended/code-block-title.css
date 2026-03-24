@@ -27,7 +27,8 @@
   padding: 0;
 }
 
-.code-block-collapsible details summary.code-block-title {
+.code-block-collapsible details summary.code-block-title,
+.code-block-collapsible details summary.code-block-title-bar {
   cursor: pointer;
   list-style: none;
   display: flex;
@@ -35,18 +36,193 @@
   user-select: none;
 }
 
-.code-block-collapsible details summary.code-block-title::-webkit-details-marker {
+.code-block-collapsible details summary.code-block-title::-webkit-details-marker,
+.code-block-collapsible details summary.code-block-title-bar::-webkit-details-marker {
   display: none;
 }
 
-.code-block-collapsible details summary.code-block-title::before {
+.code-block-collapsible details summary.code-block-title::before,
+.code-block-collapsible details summary.code-block-title-bar .code-block-title::before {
   content: "▶";
   display: inline-block;
   margin-right: 8px;
   font-size: 0.7em;
   transition: transform 0.2s ease;
+  flex-shrink: 0;
 }
 
-.code-block-collapsible details[open] summary.code-block-title::before {
+.code-block-collapsible details[open] summary.code-block-title::before,
+.code-block-collapsible details[open] summary.code-block-title-bar .code-block-title::before {
   transform: rotate(90deg);
+}
+
+/* Diff line highlighting */
+.highlight-diff .chroma .line {
+  padding-left: 8.5ch;
+  position: relative;
+  display: flex;
+}
+
+/* old 줄 번호 (::before) */
+.highlight-diff .chroma .line::before {
+  content: attr(data-old-ln);
+  position: absolute;
+  left: 0;
+  width: 3ch;
+  text-align: right;
+  color: var(--secondary, #6c6c6c);
+  user-select: none;
+  opacity: 0.6;
+}
+
+/* new 줄 번호 (::after) */
+.highlight-diff .chroma .line::after {
+  content: attr(data-new-ln);
+  position: absolute;
+  left: 3.5ch;
+  width: 3ch;
+  text-align: right;
+  color: var(--secondary, #6c6c6c);
+  user-select: none;
+  opacity: 0.6;
+}
+
+/* +/- 마커 */
+.highlight-diff .chroma .line .diff-marker {
+  position: absolute;
+  left: 7ch;
+  width: 1.5ch;
+  user-select: none;
+}
+
+.highlight-diff .chroma .line.diff-added .diff-marker {
+  color: #a6da95;
+}
+
+.highlight-diff .chroma .line.diff-removed .diff-marker {
+  color: #ed8796;
+}
+
+/* 배경색 - 다크/라이트 동일 */
+.highlight-diff .chroma .line.diff-added {
+  background-color: #1e3a2a;
+}
+
+.highlight-diff .chroma .line.diff-removed {
+  background-color: #3a2123;
+}
+
+.highlight-diff .chroma .gd,
+.highlight-diff .chroma .gi {
+  color: inherit;
+  background-color: inherit;
+}
+
+/* codediff title bar + toggle */
+.code-block-title-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--tertiary);
+  padding: 6px 14px;
+}
+
+.code-block-title-bar .code-block-title {
+  border-bottom: none;
+  padding: 0;
+  font-size: 0.85em;
+  font-family: consolas, monaco, courier new, monospace !important;
+}
+
+.codediff-toggle {
+  display: flex;
+  gap: 0;
+  margin-right: 8px;
+  border: 1px solid var(--tertiary, #414244);
+  border-radius: 4px;
+  overflow: hidden;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+  font-size: 0.75em;
+  font-family: inherit;
+}
+
+.codediff-toggle span {
+  padding: 3px 8px;
+  color: var(--secondary, #9b9c9d);
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.codediff-toggle span.active {
+  background-color: var(--tertiary, #414244);
+  color: var(--primary, #dadaeb);
+}
+
+.codediff-toggle span:hover:not(.active) {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Side-by-side diff */
+.codediff-side {
+  display: flex;
+}
+
+.codediff-side .codediff-side-old,
+.codediff-side .codediff-side-new {
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  border-radius: 0 !important;
+  margin: 0 !important;
+}
+
+.codediff-side .codediff-side-old {
+  border-right: 1px solid var(--tertiary, #414244);
+}
+
+/* side 모드: 줄 번호 | 마커 → 코드 순서 */
+.codediff-side .chroma .line {
+  padding-left: 5.5ch;
+}
+
+/* 줄 번호 (맨 왼쪽) */
+.codediff-side .chroma .line::before {
+  left: 0;
+  width: 2.5ch;
+  border-right: 1px solid var(--tertiary, #414244);
+  padding-right: 0.5ch;
+}
+
+/* 마커 (줄 번호 오른쪽) */
+.codediff-side .chroma .line .diff-marker {
+  left: 3.5ch;
+  width: 1.5ch;
+  text-align: center;
+}
+
+.codediff-side-old.highlight-diff .chroma .line::before {
+  content: attr(data-old-ln);
+}
+
+.codediff-side-old.highlight-diff .chroma .line::after {
+  content: none;
+}
+
+.codediff-side-new.highlight-diff .chroma .line::before {
+  content: attr(data-new-ln);
+}
+
+.codediff-side-new.highlight-diff .chroma .line::after {
+  content: none;
+}
+
+/* 빈 줄 (상대 패널의 추가/삭제에 대응) */
+.highlight-diff .chroma .line.diff-empty {
+  opacity: 0.3;
+  user-select: none;
+}
+
+.highlight-diff .chroma .line.diff-empty .cl::before {
+  content: "\a0";
 }

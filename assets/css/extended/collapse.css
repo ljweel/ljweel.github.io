@@ -52,3 +52,15 @@
   border-bottom: 1px solid var(--tertiary);
   padding-bottom: 6px;
 }
+
+.post-content .code-block-collapsible details summary.code-block-title-bar {
+  font-weight: normal;
+  padding: 6px 14px;
+  color: #d4d4d4;
+}
+
+.post-content .code-block-collapsible details[open] summary.code-block-title-bar {
+  margin-bottom: 0;
+  border-bottom: 1px solid var(--tertiary);
+  padding-bottom: 6px;
+}

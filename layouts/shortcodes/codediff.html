@@ -1,0 +1,50 @@
+{{- $title := .Get "title" | default "" -}}
+{{- $collapsible := false -}}
+{{- $openByDefault := false -}}
+{{- with .Get "openByDefault" -}}
+  {{- $collapsible = true -}}
+  {{- if eq . "true" -}}
+    {{- $openByDefault = true -}}
+  {{- end -}}
+{{- end -}}
+<div class="code-block-wrapper codediff-wrapper{{ if $collapsible }} code-block-collapsible{{ end }}">
+  {{- if $collapsible }}
+  <details{{ if $openByDefault }} open{{ end }}>
+    <summary class="code-block-title-bar">
+      {{- if $title }}
+      <span class="code-block-title">{{ $title }}</span>
+      {{- end }}
+      <button class="codediff-toggle" title="보기 전환" onclick="event.stopPropagation();">
+        <span class="codediff-toggle-line active">Inline</span>
+        <span class="codediff-toggle-side">Side</span>
+      </button>
+    </summary>
+  {{- else }}
+  <div class="code-block-title-bar">
+    {{- if $title }}
+    <div class="code-block-title">{{ $title }}</div>
+    {{- end }}
+    <button class="codediff-toggle" title="보기 전환">
+      <span class="codediff-toggle-line active">Inline</span>
+      <span class="codediff-toggle-side">Side</span>
+    </button>
+  </div>
+  {{- end }}
+  <div class="codediff-container">
+    {{ .Inner }}
+    <div class="codediff-output highlight highlight-diff">
+      <pre tabindex="0" class="chroma"><code></code></pre>
+    </div>
+    <div class="codediff-side highlight-diff" style="display:none;">
+      <div class="codediff-side-old highlight highlight-diff">
+        <pre tabindex="0" class="chroma"><code></code></pre>
+      </div>
+      <div class="codediff-side-new highlight highlight-diff">
+        <pre tabindex="0" class="chroma"><code></code></pre>
+      </div>
+    </div>
+  </div>
+  {{- if $collapsible }}
+  </details>
+  {{- end }}
+</div>

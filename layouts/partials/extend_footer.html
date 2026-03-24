@@ -100,10 +100,203 @@ window.addEventListener('resize', function() {
   document.querySelectorAll('.tooltip').forEach(adjustTooltip);
 });
 
+// diff 코드 블록: +/- 텍스트 제거 + .line에 클래스 추가 + old/new 줄 번호 + 복사 오버라이드
+document.querySelectorAll('code[data-lang="diff"]').forEach(function(block) {
+  var highlight = block.closest('.highlight');
+  highlight.classList.add('highlight-diff');
 
+  var oldNum = 1;
+  var newNum = 1;
 
+  block.querySelectorAll('.line').forEach(function(line) {
+    var gi = line.querySelector('.gi');
+    var gd = line.querySelector('.gd');
 
+    var oldLabel = '';
+    var newLabel = '';
 
+    var marker = document.createElement('span');
+    marker.className = 'diff-marker';
+
+    if (gi) {
+      line.classList.add('diff-added');
+      var firstChild = gi.firstChild;
+      if (firstChild && firstChild.nodeType === Node.TEXT_NODE && firstChild.textContent.startsWith('+')) {
+        firstChild.textContent = firstChild.textContent.substring(1);
+      }
+      marker.textContent = '+';
+      newLabel = newNum++;
+    } else if (gd) {
+      line.classList.add('diff-removed');
+      var firstChild = gd.firstChild;
+      if (firstChild && firstChild.nodeType === Node.TEXT_NODE && firstChild.textContent.startsWith('-')) {
+        firstChild.textContent = firstChild.textContent.substring(1);
+      }
+      marker.textContent = '-';
+      oldLabel = oldNum++;
+    } else {
+      oldLabel = oldNum++;
+      newLabel = newNum++;
+    }
+
+    line.setAttribute('data-old-ln', oldLabel);
+    line.setAttribute('data-new-ln', newLabel);
+    line.insertBefore(marker, line.firstChild);
+  });
+
+  // 복사 버튼: 삭제된 줄 제외하고 복사 (setTimeout으로 테마 복사 버튼 생성 이후 실행)
+  (function(bl, hl) {
+    setTimeout(function() {
+      var copyBtn = hl.querySelector('.copy-code');
+      if (!copyBtn) return;
+      var newBtn = copyBtn.cloneNode(true);
+      copyBtn.parentNode.replaceChild(newBtn, copyBtn);
+
+      newBtn.addEventListener('click', function() {
+        var lines = bl.querySelectorAll('.line');
+        var result = [];
+        lines.forEach(function(line) {
+          if (!line.classList.contains('diff-removed')) {
+            result.push(line.textContent);
+          }
+        });
+        var text = result.join('').replace(/\n$/, '');
+        navigator.clipboard.writeText(text);
+        newBtn.innerHTML = '복사 완료!';
+        setTimeout(function() { newBtn.innerHTML = '복사'; }, 2000);
+      });
+    }, 0);
+  })(block, highlight);
+});
+
+// codediff shortcode: jsdiff로 두 코드 비교 후 렌더링
+(function() {
+  var containers = document.querySelectorAll('.codediff-wrapper');
+  if (!containers.length) return;
+
+  function makeLine(text, cls, markerChar, oldLabel, newLabel) {
+    var lineEl = document.createElement('span');
+    lineEl.className = 'line';
+    if (cls) lineEl.classList.add(cls);
+
+    var marker = document.createElement('span');
+    marker.className = 'diff-marker';
+    if (markerChar) marker.textContent = markerChar;
+
+    var clEl = document.createElement('span');
+    clEl.className = 'cl';
+    clEl.textContent = text + '\n';
+
+    lineEl.setAttribute('data-old-ln', oldLabel);
+    lineEl.setAttribute('data-new-ln', newLabel);
+    lineEl.appendChild(marker);
+    lineEl.appendChild(clEl);
+    return lineEl;
+  }
+
+  function addCopyBtn(container, codeEl, excludeRemoved) {
+    var copyBtn = document.createElement('button');
+    copyBtn.className = 'copy-code';
+    copyBtn.innerHTML = '복사';
+    copyBtn.addEventListener('click', function() {
+      var result = [];
+      codeEl.querySelectorAll('.line').forEach(function(line) {
+        if (excludeRemoved && line.classList.contains('diff-removed')) return;
+        if (line.classList.contains('diff-empty')) return;
+        var cl = line.querySelector('.cl');
+        if (cl) result.push(cl.textContent);
+      });
+      var text = result.join('').replace(/\n$/, '');
+      navigator.clipboard.writeText(text);
+      copyBtn.innerHTML = '복사 완료!';
+      setTimeout(function() { copyBtn.innerHTML = '복사'; }, 2000);
+    });
+    container.appendChild(copyBtn);
+  }
+
+  var script = document.createElement('script');
+  script.src = 'https://cdn.jsdelivr.net/npm/diff@5/dist/diff.min.js';
+  script.onload = function() {
+    containers.forEach(function(wrapper) {
+      var oldPre = wrapper.querySelector('.codediff-old');
+      var newPre = wrapper.querySelector('.codediff-new');
+      if (!oldPre || !newPre) return;
+
+      var oldText = oldPre.textContent;
+      var newText = newPre.textContent;
+      var diff = Diff.diffLines(oldText, newText);
+
+      // line 렌더링
+      var lineCode = wrapper.querySelector('.codediff-output code');
+      if (lineCode) {
+        var oldNum = 1, newNum = 1;
+        diff.forEach(function(part) {
+          var lines = part.value.replace(/\n$/, '').split('\n');
+          lines.forEach(function(lineText) {
+            var cls = '', mc = '', ol = '', nl = '';
+            if (part.added) { cls = 'diff-added'; mc = '+'; nl = newNum++; }
+            else if (part.removed) { cls = 'diff-removed'; mc = '-'; ol = oldNum++; }
+            else { ol = oldNum++; nl = newNum++; }
+            lineCode.appendChild(makeLine(lineText, cls, mc, ol, nl));
+          });
+        });
+        addCopyBtn(wrapper.querySelector('.codediff-output'), lineCode, false);
+      }
+
+      // side 렌더링
+      var oldCode = wrapper.querySelector('.codediff-side-old code');
+      var newCode = wrapper.querySelector('.codediff-side-new code');
+      if (oldCode && newCode) {
+        var oldNum = 1, newNum = 1;
+        diff.forEach(function(part) {
+          var lines = part.value.replace(/\n$/, '').split('\n');
+          lines.forEach(function(lineText) {
+            if (part.removed) {
+              oldCode.appendChild(makeLine(lineText, 'diff-removed', '-', oldNum, ''));
+              newCode.appendChild(makeLine('', 'diff-empty', '', '', ''));
+              oldNum++;
+            } else if (part.added) {
+              oldCode.appendChild(makeLine('', 'diff-empty', '', '', ''));
+              newCode.appendChild(makeLine(lineText, 'diff-added', '+', '', newNum));
+              newNum++;
+            } else {
+              oldCode.appendChild(makeLine(lineText, '', '', oldNum, ''));
+              newCode.appendChild(makeLine(lineText, '', '', '', newNum));
+              oldNum++;
+              newNum++;
+            }
+          });
+        });
+        addCopyBtn(wrapper.querySelector('.codediff-side-old'), oldCode, false);
+        addCopyBtn(wrapper.querySelector('.codediff-side-new'), newCode, false);
+      }
+
+      // 토글 버튼
+      var toggleBtn = wrapper.querySelector('.codediff-toggle');
+      var lineView = wrapper.querySelector('.codediff-output');
+      var sideView = wrapper.querySelector('.codediff-side');
+      var btnLine = wrapper.querySelector('.codediff-toggle-line');
+      var btnSide = wrapper.querySelector('.codediff-toggle-side');
+
+      if (toggleBtn && lineView && sideView) {
+        toggleBtn.addEventListener('click', function() {
+          if (lineView.style.display !== 'none') {
+            lineView.style.display = 'none';
+            sideView.style.display = 'flex';
+            btnLine.classList.remove('active');
+            btnSide.classList.add('active');
+          } else {
+            lineView.style.display = '';
+            sideView.style.display = 'none';
+            btnLine.classList.add('active');
+            btnSide.classList.remove('active');
+          }
+        });
+      }
+    });
+  };
+  document.head.appendChild(script);
+})();
 
 </script>
 

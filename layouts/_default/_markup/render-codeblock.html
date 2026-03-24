@@ -1,8 +1,32 @@
 {{- $title := "" -}}
+{{- $collapsible := false -}}
+{{- $openByDefault := false -}}
 {{- with .Attributes.title -}}
   {{- $title = . -}}
 {{- end -}}
-{{- if $title }}
+{{- if isset .Attributes "openbydefault" -}}
+  {{- $collapsible = true -}}
+  {{- if eq (printf "%s" .Attributes.openbydefault) "true" -}}
+    {{- $openByDefault = true -}}
+  {{- end -}}
+{{- end -}}
+{{- if and $title $collapsible }}
+{{- if $openByDefault }}
+<div class="code-block-wrapper code-block-collapsible">
+  <details open>
+    <summary class="code-block-title">{{ $title }}</summary>
+    {{ highlight .Inner .Type .Options }}
+  </details>
+</div>
+{{- else }}
+<div class="code-block-wrapper code-block-collapsible">
+  <details>
+    <summary class="code-block-title">{{ $title }}</summary>
+    {{ highlight .Inner .Type .Options }}
+  </details>
+</div>
+{{- end }}
+{{- else if $title }}
 <div class="code-block-wrapper">
   <div class="code-block-title">{{ $title }}</div>
   {{ highlight .Inner .Type .Options }}

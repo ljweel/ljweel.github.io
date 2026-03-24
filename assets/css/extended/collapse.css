@@ -27,3 +27,28 @@
   border-bottom: 1px solid var(--tertiary, #ddd);
   padding-bottom: 8px;
 }
+
+/* Reset collapse styles for collapsible code blocks */
+.post-content .code-block-collapsible details {
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
+  background-color: transparent;
+}
+
+.post-content .code-block-collapsible details summary.code-block-title {
+  font-weight: normal;
+  padding: 6px 14px;
+  color: #d4d4d4;
+}
+
+.post-content .code-block-collapsible details summary.code-block-title::marker {
+  display: none;
+}
+
+.post-content .code-block-collapsible details[open] summary.code-block-title {
+  margin-bottom: 0;
+  border-bottom: 1px solid var(--tertiary);
+  padding-bottom: 6px;
+}

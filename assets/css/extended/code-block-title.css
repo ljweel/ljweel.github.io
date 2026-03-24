@@ -19,3 +19,34 @@
 .code-block-wrapper .highlight {
   margin: 0 !important;
 }
+
+/* Collapsible code block */
+.code-block-collapsible details {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.code-block-collapsible details summary.code-block-title {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  user-select: none;
+}
+
+.code-block-collapsible details summary.code-block-title::-webkit-details-marker {
+  display: none;
+}
+
+.code-block-collapsible details summary.code-block-title::before {
+  content: "▶";
+  display: inline-block;
+  margin-right: 8px;
+  font-size: 0.7em;
+  transition: transform 0.2s ease;
+}
+
+.code-block-collapsible details[open] summary.code-block-title::before {
+  transform: rotate(90deg);
+}

@@ -1,7 +1,7 @@
 ---
 title: "1000줄로 만드는 OS"
 summary: "OS 스터디하면서 공부한 내용을 기록합니다."
-date: 2026-03-18
+date: 2026-03-24
 ---
 [1000줄로 만드는 OS](https://operating-system-in-1000-lines.vercel.app/ko/)
 

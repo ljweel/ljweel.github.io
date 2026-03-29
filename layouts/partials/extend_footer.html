@@ -52,7 +52,7 @@
                     if (!path) return;
 
                     fetchCount(path, function(count) {
-                        el.textContent = count > 0 ? '조회수 ' + count.toLocaleString() : '';
+                        el.textContent = '조회수 ' + count.toLocaleString();
                     });
                 }
             });

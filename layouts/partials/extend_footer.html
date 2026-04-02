@@ -157,7 +157,8 @@ document.querySelectorAll('code[data-lang="diff"]').forEach(function(block) {
         var result = [];
         lines.forEach(function(line) {
           if (!line.classList.contains('diff-removed')) {
-            result.push(line.textContent);
+            var cl = line.querySelector('.cl');
+            if (cl) result.push(cl.textContent);
           }
         });
         var text = result.join('').replace(/\n$/, '');

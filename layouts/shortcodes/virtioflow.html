@@ -1,0 +1,190 @@
+<h2 id="virtio-blk-io-flow-시뮬레이션">virtio-blk I/O Flow 시뮬레이션</h2>
+
+<div id="v-flow-fixed-align">
+    <style>
+        #v-flow-fixed-align {
+            --v-active: #ff9800;
+            --v-border: #333;
+            display: flex; flex-direction: column; align-items: center;
+            padding: 10px; font-family: 'Segoe UI', sans-serif;
+            background: #fff; color: #212121; width: 100%; overflow-x: auto;
+        }
+
+        #v-flow-fixed-align .canvas {
+            position: relative; width: 980px; height: 620px;
+            background: #fff; border: 1px solid #eee; border-radius: 10px;
+        }
+
+        /* [핵심] 모든 요소에 border-box 적용 및 중앙 정렬 강제 */
+        #v-flow-fixed-align * { box-sizing: border-box; }
+
+        #v-flow-fixed-align .node {
+            position: absolute; 
+            border: 1.5px solid var(--v-border); 
+            background: #fff;
+            display: flex !important; 
+            flex-direction: column !important; 
+            align-items: center !important; 
+            justify-content: center !important;
+            text-align: center;
+            z-index: 10; 
+            font-size: 13px; 
+            font-weight: 600;
+            transition: border 0.1s, background 0.2s;
+        }
+
+        /* 하이라이트 시 정렬 유지 및 테두리만 확장 */
+        #v-flow-fixed-align .node.active { 
+            border: 3.5px solid var(--v-active) !important; 
+            background: #fffde7 !important; 
+            z-index: 20; 
+            box-shadow: 0 0 15px rgba(255,152,0,0.3);
+            /* 정렬 속성 재확인 (밀림 방지) */
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+
+        /* 레이아웃 배치 */
+        .n-driver { top: 40px; left: 330px; width: 180px; height: 50px; }
+        .n-device { bottom: 40px; left: 330px; width: 200px; height: 50px; }
+        
+        .vq-grp { position: absolute; top: 160px; left: 20px; width: 680px; height: 320px; border: 2px dashed #999; border-radius: 10px; z-index: 1; }
+        .vq-label { position: absolute; top: 10px; left: 15px; font-weight: bold; font-size: 16px; color: #333; }
+
+        .n-desc { top: 205px; left: 50px; width: 180px; height: 230px; }
+        .n-avail { top: 205px; left: 265px; width: 180px; height: 230px; }
+        .n-used { top: 205px; left: 480px; width: 180px; height: 230px; }
+
+        /* blk_req (User buf 제외) */
+        .n-req-box { top: 40px; right: 20px; width: 220px; height: 440px; }
+        .n-user-buf { top: 510px; right: 20px; width: 220px; height: 50px; border-width: 2px; }
+
+        /* 화살표 스타일 */
+        .a-line { position: absolute; background: var(--v-active); z-index: 15; display: none; box-shadow: 0 0 5px var(--v-active); }
+        .a-head { position: absolute; width: 0; height: 0; border: 6px solid transparent; z-index: 16; display: none; }
+        .active { display: block !important; }
+        .h-down { border-top-color: var(--v-active); }
+        .h-up { border-bottom-color: var(--v-active); }
+        .h-right { border-left-color: var(--v-active); }
+
+        /* 컨트롤 영역 */
+        .desc-text { font-size: 16px; color: #d32f2f; font-weight: bold; min-height: 45px; text-align: center; margin: 15px 0; }
+        #v-flow-fixed-align button { padding: 8px 25px; cursor: pointer; background: #333; color: white; border: none; border-radius: 4px; font-weight: bold; }
+        #v-flow-fixed-align button:disabled { background: #eee; color: #999; }
+    </style>
+
+    <div class="canvas">
+        <div class="vq-grp"><span class="vq-label">virtqueue</span></div>
+        
+        <div id="l-dr" class="node n-driver">Device Driver</div>
+        
+        <div id="l-ds" class="node n-desc">
+            <div style="border-bottom:1px solid #333; width:85%; padding-bottom:5px; margin-bottom:15px; font-weight:bold;">Descriptor Chain</div>
+            <div style="font-size:11px; text-align:left; line-height:1.8; width:80%;">
+                [0] Header (NEXT)<br> [1] Data (NEXT|W)<br> [2] Status (WRITE)
+            </div>
+        </div>
+        
+        <div id="l-av" class="node n-avail">
+            <div style="border-bottom:1px solid #333; width:85%; padding-bottom:5px; margin-bottom:15px; font-weight:bold;">Avail Ring</div>
+            <div id="l-av-val" style="margin-top:20px;">idx: 0<br>ring[0]: ?</div>
+        </div>
+
+        <div id="l-us" class="node n-used">
+            <div style="border-bottom:1px solid #333; width:85%; padding-bottom:5px; margin-bottom:15px; font-weight:bold;">Used Ring</div>
+            <div id="l-us-val" style="margin-top:20px;">idx: 0<br>ring[0]: ?</div>
+        </div>
+
+        <div id="l-de" class="node n-device">Virtio Device (QEMU)</div>
+
+        <!-- blk_req (User buf 분리됨) -->
+        <div id="l-req" class="node n-req-box">
+            <b style="font-size:15px; margin-bottom:25px; display:block;">blk_req</b>
+            <div style="width:90%; font-size:11px; display:flex; flex-direction:column; align-items:center;">
+                <div id="l-req-t" style="border:1px solid #333; padding:5px; margin-bottom:8px; width:100%;">type: ?</div>
+                <div id="l-req-s" style="border:1px solid #333; padding:5px; margin-bottom:15px; width:100%;">sector: ?</div>
+                <div id="l-req-d" style="border:1px solid #333; height:130px; background:#f5f5f5; width:100%; display:flex; align-items:center; justify-content:center;">data 영역</div>
+                <div id="l-req-st" style="border:1px solid #333; padding:5px; margin-top:15px; width:100%;">status: ?</div>
+            </div>
+        </div>
+        
+        <!-- 독립된 User buf -->
+        <div id="l-ub" class="node n-user-buf">User buf [ ]</div>
+
+        <!-- 정교하게 꺾인 화살표 (s2, s6, s7, s8) -->
+        <!-- S2: Driver -> Desc -->
+        <div class="a-line s2" style="top: 65px; left: 140px; width: 190px; height: 3px;"></div>
+        <div class="a-line s2" style="top: 65px; left: 140px; width: 3px; height: 140px;"></div>
+        <div class="a-head s2 h-down" style="top: 198px; left: 135px;"></div>
+
+        <!-- S3: Driver -> Avail -->
+        <div class="a-line s3" style="top: 90px; left: 355px; width: 3px; height: 115px;"></div>
+        <div class="a-head s3 h-down" style="top: 198px; left: 349px;"></div>
+
+        <!-- S4: Driver -> Device (Notify) -->
+        <div class="a-line s4" style="top: 90px; left: 430px; width: 3px; height: 440px;"></div>
+        <div class="a-head s4 h-down" style="top: 523px; left: 424px;"></div>
+
+        <!-- S5: Device -> Avail (Pop) -->
+        <div class="a-line s5" style="bottom: 90px; left: 355px; width: 3px; height: 115px;"></div>
+        <div class="a-head s5 h-up" style="bottom: 198px; left: 349px;"></div>
+
+        <!-- S6: Device -> Desc -->
+        <div class="a-line s6" style="bottom: 65px; left: 140px; width: 190px; height: 3px;"></div>
+        <div class="a-line s6" style="bottom: 65px; left: 140px; width: 3px; height: 140px;"></div>
+        <div class="a-head s6 h-up" style="bottom: 198px; left: 135px;"></div>
+
+        <!-- S7: Device -> Used -->
+        <div class="a-line s7" style="bottom: 65px; left: 430px; width: 140px; height: 3px;"></div>
+        <div class="a-line s7" style="bottom: 65px; left: 570px; width: 3px; height: 140px;"></div>
+        <div class="a-head s7 h-up" style="bottom: 198px; left: 564px;"></div>
+
+        <!-- S8: Used -> Driver -->
+        <div class="a-line s8" style="top: 65px; left: 430px; width: 140px; height: 3px;"></div>
+        <div class="a-line s8" style="top: 65px; left: 570px; width: 3px; height: 140px;"></div>
+        <div class="a-head s8 h-up" style="top: 100px; left: 564px;"></div>
+        
+        <!-- S8: blk_req -> User buf Copy -->
+        <div class="a-line s8" style="top: 310px; right: 230px; width: 30px; height: 3px; background:blue;"></div>
+        <div class="a-line s8" style="top: 310px; right: 260px; width: 3px; height: 235px; background:blue;"></div>
+        <div class="a-line s8" style="top: 545px; right: 240px; width: 23px; height: 3px; background:blue;"></div>
+        <div class="a-head s8 h-right" style="top: 540px; right: 234px; border-left-color:blue;"></div>
+
+    </div>
+
+    <div class="desc-text" id="m-msg">read_write_disk()</div>
+    <div class="controls">
+        <button onclick="m_move(-1)" id="m-btn-p" disabled>Prev</button>
+        <span id="m-step" style="font-weight:bold; font-size:18px;">Step 0 / 8</span>
+        <button onclick="m_move(1)" id="m-btn-n">Next</button>
+    </div>
+
+    <script>
+        (function() {
+            let s = 0; const total = 8;
+            const el = id => document.getElementById(id);
+            const steps = [
+                { txt: "시뮬레이션 준비 완료", act: () => {} },
+                { txt: "Step 1: Driver가 blk_req 구조체 준비 (type: IN, sector: 0)", act: () => { el('l-dr').classList.add('active'); el('l-req').classList.add('active'); el('l-req-t').innerText="type: 0 (IN)"; el('l-req-s').innerText="sector: 0"; } },
+                { txt: "Step 2: 디스크립터 체인 구성 (Header -> Data -> Status)", act: () => { el('l-dr').classList.add('active'); el('l-ds').classList.add('active'); show(2); } },
+                { txt: "Step 3: Available Ring의 첫 슬롯에 헤드 인덱스(0) 등록", act: () => { el('l-dr').classList.add('active'); el('l-av').classList.add('active'); show(3); el('l-av-val').innerHTML="idx: 1<br>ring[0]: 0"; } },
+                { txt: "Step 4: MMIO NOTIFY를 통해 장치에 새 요청 알림", act: () => { el('l-dr').classList.add('active'); el('l-de').classList.add('active'); show(4); } },
+                { txt: "Step 5: 장치가 Avail Ring에서 인덱스를 꺼내 요청 확인", act: () => { el('l-de').classList.add('active'); el('l-av').classList.add('active'); show(5); } },
+                { txt: "Step 6: 장치가 데이터를 읽어 blk_req->data에 기록하고 status 업데이트", act: () => { el('l-de').classList.add('active'); el('l-ds').classList.add('active'); el('l-req').classList.add('active'); show(6); el('l-req-d').innerText="[Disk Data Loaded]"; el('l-req-d').style.background="#e3f2fd"; el('l-req-st').innerText="status: 0 (OK)"; } },
+                { txt: "Step 7: 장치가 완료된 디스크립터 인덱스를 Used Ring에 기록", act: () => { el('l-de').classList.add('active'); el('l-us').classList.add('active'); show(7); el('l-us-val').innerHTML="idx: 1<br>ring[0]: 0"; } },
+                { txt: "Step 8: 드라이버가 완료 감지 후 데이터를 User buf로 복사", act: () => { el('l-dr').classList.add('active'); el('l-us').classList.add('active'); el('l-ub').classList.add('active'); show(8); el('l-ub').innerText="User buf [Data Loaded]"; el('l-ub').style.background="#e8f5e9"; el('l-ub').style.borderColor="#28a745"; } }
+            ];
+
+            function show(n) { document.querySelectorAll('.s'+n).forEach(x => x.classList.add('active')); }
+            window.m_move = (dir) => {
+                s += dir;
+                document.querySelectorAll('#v-flow-fixed-align .node, #v-flow-fixed-align .a-line, #v-flow-fixed-align .a-head').forEach(x => x.classList.remove('active'));
+                steps[s].act();
+                el('m-msg').innerText = steps[s].txt;
+                el('m-step').innerText = `Step ${s} / ${total}`;
+                el('m-btn-p').disabled = s===0; el('m-btn-n').disabled = s===total;
+            };
+        })();
+    </script>
+</div>

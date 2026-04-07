@@ -71,7 +71,7 @@ node에서 nsjail을 실행시키려면 child_process의 spawn을 사용하면 �
 - 실행하다가 "spawnSync /usr/local/bin/nsjail ENOENT"라는 에러가 떴는데, 이것은 node.js가 nsjail 경로를 찾지 못해서였는데, 알고보니 ubuntu용 node가 없고, window node로 실행되어서 window node가 해당 경로로 가게 되어 nsjail을 찾지 못하게 되는 것이였다. 그래서 바로 nvm을 깔아 주었다.
 
 수많은 에러끝에 성공해냄.
-![alt text](/images/OnPyRunner04/img01.png)
+![alt text](/images/OnPyRunner/OnPyRunner04/img01.png)
 
 
 ## 참고 자료

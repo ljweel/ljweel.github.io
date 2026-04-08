@@ -1,0 +1,9 @@
+.terminal-cmd::before {
+  content: "$ ";
+  user-select: none;
+  color: #6a9955;
+}
+
+.terminal-output {
+  color: #9cdcfe;
+}

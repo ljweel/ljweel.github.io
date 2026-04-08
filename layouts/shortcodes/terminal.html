@@ -1,0 +1,13 @@
+{{- $lines := split (strings.TrimSpace .Inner) "\n" -}}
+<pre class="terminal"><code>
+{{- range $i, $line := $lines -}}
+{{- $trimmed := strings.TrimSpace $line -}}
+{{- if ne $trimmed "" -}}
+{{- if hasPrefix $trimmed "$ " }}
+<span class="terminal-cmd">{{ strings.TrimPrefix "$ " $trimmed }}</span>
+{{- else }}
+<span class="terminal-output">{{ $trimmed }}</span>
+{{- end -}}
+{{- end -}}
+{{- end }}
+</code></pre>

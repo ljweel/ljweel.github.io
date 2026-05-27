@@ -2,7 +2,7 @@
 title: "01. 단일 서버에서 수백만 사용자까지"
 description: "single server, load balancer, database replication, cache, CDN, sharding, stateless"
 summary: "단일 서버 구성에서 시작해 수백만 사용자를 감당하는 시스템으로 점진적으로 확장하는 과정을 다룬 글입니다."
-tags: ['system design', '시스템설계', '네트워크']
+tags: ['system design', '시스템 디자인', '네트워크']
 categories: ['study']
 author: "ljweel"
 date: 2026-04-26

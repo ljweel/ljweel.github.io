@@ -1,9 +1,14 @@
 baseURL: 'https://ljweel.github.io/'
-languageCode: 'ko'
+locale: 'ko'
 defaultContentLanguage: 'ko'
 title: '장어의 블로그'
 theme: 'PaperMod'
 
+
+security:
+  allowContent:
+    - text/html
+    - text/markdown
 # 한국어 설정
 languages:
   ko:
